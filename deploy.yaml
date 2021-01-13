@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tomcatjavademo
+  name: tomcatjavademo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcatjavademo
+  template:
+    metadata:
+      labels:
+        app: tomcatjavademo
+    spec:
+      imagePullSecrets:
+        - name: docker-harbor-registry
+      containers:
+      - image: 192.168.153.102/myweb/tomcat-java-demoprod:__VERSION__
+        name: nginx
+        resources: {}
+
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tomcatjavademo
+  name: tomcatjavademo
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    
+  selector:
+    app: tomcatjavademo
+  type: NodePort
